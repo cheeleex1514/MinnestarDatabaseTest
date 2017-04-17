@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<configuration>
+	<drivers>
+		<jdbc>com.mysql.jdbc.Driver</jdbc>
+	</drivers>
+	<hosts>
+		<jdbcHost>
+			<local>jdbc:mysql://localhost:3306/db_minnestar?useSSL=false</local>
+		</jdbcHost>
+	</hosts>
+	<users>
+		<defaultUser>
+			<username>root</username>
+			<userPassword>sunshine1</userPassword>
+		</defaultUser>
+	</users>
+</configuration>

@@ -1,6 +1,8 @@
-package control;
+package model;
 
 import java.sql.ResultSet;
+
+import com.mysql.jdbc.Connection;
 
 /**
  * Interface for creating a connection to MySQL database.
@@ -13,14 +15,7 @@ import java.sql.ResultSet;
  * @author Chee M. Lee on 4/11/17.
  *
  */
-public interface DatabaseConnections {
-	
-	/**
-	 * Method to create a connection to the database, require properly 
-	 * instantiated database user object with valid username and value password.
-	 */
-	public void databaseConnector();
-	
+public interface QueryManager {
 	
 	/**
 	 * Method to return a select query response from the database.
@@ -30,10 +25,20 @@ public interface DatabaseConnections {
 	 */
 	public ResultSet initiateSelectQuery(String selectQuery);
 	
+	/**
+	 * Method update a record in the database.
+	 * 
+	 * @param selectQuery The desired select statement.
+	 * @return The select query returned from database.
+	 */
+	public boolean updateDatabaseObject(String updateStatement);
 	
 	/**
-	 * Close all database connections
+	 * Method to create a new record in the database.
+	 * 
+	 * @param selectQuery The desired select statement.
+	 * @return The select query returned from database.
 	 */
-	public void closeDatabaseConnection();
-	
+	public boolean createDatabaseObject(String createStatement);
+
 }

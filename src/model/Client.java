@@ -1,4 +1,4 @@
-package control;
+package model;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -12,59 +12,34 @@ import java.sql.SQLException;
  * 
  * Created by Chee M. Lee on 4/11/17.
  */
-public class DatabaseUser implements DatabaseConnections{
-	private String databaseUserName 		= "";
-	private String databasePassword 		= "";
-	private boolean isProperlyIntialized 	= false;
+public class Client implements QueryManager{
+	private String databaseUserName 		= null;
+	private String databasePassword 		= null;
 	private boolean isConnectionSuccess 	= false;
 	private Connection databaseConnection 	= null;
-	private Statement selectStatment 		= null;
+	private Statement selectStatement 		= null;
 	private ResultSet databaseResponse 		= null;
-	
+
 	/**
 	 * Constructor for DatabaseUser. Parameters must be valid credentials.
 	 * 
 	 * @param username The desired valid user name.
 	 * @param userpassword The desired valid password.
 	 */
-	public DatabaseUser(String username, String userpassword) throws IllegalArgumentException{
-		if(username.isEmpty() || userpassword.isEmpty()){
-			this.setProperlyIntialized(false);
-			System.out.println("Unable to instantiate DatabaseUser.");
-			throw new IllegalArgumentException("Username or password cannot be empty.");
+	public Client(String username, String userpassword, Connection dbConnection){
+		if(username.isEmpty() || userpassword.isEmpty() || dbConnection == null){
+			System.out.println("Database connection was not a success.");
 		}else{
 			this.databaseUserName = username;
 			this.databasePassword = userpassword;
-			this.setProperlyIntialized(true);
+			this.databaseConnection = dbConnection;
+			this.setConnectionSuccess(true);
 		}
 	}
 	
 	/* * * * * * * * * * * * *
 	 * Public Methods
 	 * * * * * * * * * * * * */
-	@Override
-	public void databaseConnector() {
-		if(this.isProperlyIntialized())
-		{
-			try 
-			{
-				Class.forName(constants.Variables.JDBC_DRIVER);
-				databaseConnection = DriverManager.getConnection(constants.Variables.DB_LOCAL_CONNECTION, this.databaseUserName, this.databasePassword);
-				
-				System.out.println("Connection Object Created : " + databaseConnection);
-				this.setConnectionSuccess(true);
-			} catch (ClassNotFoundException e) {
-				System.out.println("JDBC Driver class not found.");
-				e.printStackTrace();
-				this.setConnectionSuccess(false);
-			} catch (SQLException e) {
-				System.out.println("Database connection unsuccessful.");
-				e.printStackTrace();
-				this.setConnectionSuccess(false);
-			}
-		}
-	}
-
 	@Override
 	public ResultSet initiateSelectQuery(String selectQuery) {
 		if(this.getQueryResponse() != null){
@@ -73,11 +48,11 @@ public class DatabaseUser implements DatabaseConnections{
 		
 		if(this.isConnectionSuccess()){
 			try	{
-				if(this.selectStatment == null){
-					this.selectStatment = this.databaseConnection.createStatement();
+				if(this.selectStatement == null){
+					this.selectStatement = this.databaseConnection.createStatement();
 				}
 				
-				this.databaseResponse = this.selectStatment.executeQuery(selectQuery);
+				this.setDatabaseResponse(this.selectStatement.executeQuery(selectQuery));
 				return this.getQueryResponse();
 				
 			} catch (SQLException e) {
@@ -91,14 +66,15 @@ public class DatabaseUser implements DatabaseConnections{
 	}
 	
 	@Override
-	public void closeDatabaseConnection(){
-		try {
-			System.out.println("Ending database connection.");
-			this.selectStatment.close();
-			this.databaseResponse.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public boolean updateDatabaseObject(String updateStatement) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean createDatabaseObject(String createStatement) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	/**
@@ -123,18 +99,6 @@ public class DatabaseUser implements DatabaseConnections{
 	/* * * * * * * * * * * * *
 	 * Private Methods
 	 * * * * * * * * * * * * */
-	/**
-	 * Method to return the current state of DatabaseUser object.
-	 * @return True if properly instantiated, else false.
-	 */
-	private boolean isProperlyIntialized(){return this.isProperlyIntialized;}
-	
-	/**
-	 * Method to set the state of DatabaseUser object.
-	 * @param isProperlyIntialized True if properly instantiated, else false.
-	 */
-	private void setProperlyIntialized(boolean isProperlyIntialized) {this.isProperlyIntialized = isProperlyIntialized;}
-
 	/**
 	 * Method to set state of database connection.
 	 * @param isConnectionSuccess True if connection success, else false.
