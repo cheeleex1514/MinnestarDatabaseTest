@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<MinnestarDatabaseProperties>
-	<ConnectionProperties>
-		<JDBCDriver>com.mysql.jdbc.Driver</JDBCDriver>
-		<ConnectionURL>jdbc:mysql://localhost/db_minnestar?</ConnectionURL>
-	</ConnectionProperties>
-</MinnestarDatabaseProperties>
