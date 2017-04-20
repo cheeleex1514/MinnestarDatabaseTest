@@ -26,12 +26,10 @@ public class Client implements QueryManager{
 	 * @param username The desired valid user name.
 	 * @param userpassword The desired valid password.
 	 */
-	public Client(String username, String userpassword, Connection dbConnection){
-		if(username.isEmpty() || userpassword.isEmpty() || dbConnection == null){
+	public Client(Connection dbConnection){
+		if(dbConnection == null){
 			System.out.println("Database connection was not a success.");
 		}else{
-			this.databaseUserName = username;
-			this.databasePassword = userpassword;
 			this.databaseConnection = dbConnection;
 			this.setConnectionSuccess(true);
 		}
