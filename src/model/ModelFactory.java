@@ -1,4 +1,4 @@
-package control;
+package model;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -8,11 +8,9 @@ import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
-import model.Client;
-
 import java.sql.Connection;
 
-public class IoCContainer {
+public class ModelFactory {
 	private String databaseUserName 		= null;
 	private String databasePassword 		= null;
 	private String jdbcDriver 				= null;
@@ -20,28 +18,9 @@ public class IoCContainer {
 	private Connection databaseConnection 	= null;
 	private Configurations configurations 	= null;
 	private XMLConfiguration xmlConfig 		= null;
-	private Client client					= null;
-	private ResultSet databaseResponse 		= null;
 	
 	//Constructor
-	public IoCContainer(){}
-	
-	public void run(){
-		String selectQuery = "select * from client";
-		client = new Client(this.getDatabaseUserName(this.getConfigurations()), this.getDatabaseUserPassword(this.getConfigurations()), this.getDatabaseConnection());
-		this.databaseResponse = client.initiateSelectQuery(selectQuery);
-		
-		try {
-    		while(databaseResponse.next()){
-				for(int x = 1; x != databaseResponse.getMetaData().getColumnCount();x++){
-					System.out.print(databaseResponse.getString(x)+" | ");
-				}
-				System.out.println();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+	public ModelFactory(){}
 	
 	//Public Methods
 	/**
@@ -66,17 +45,17 @@ public class IoCContainer {
 		return this.databaseConnection;
 	}
 	
-	//Private Methods
-	private String getDatabaseUserName(Configurations configurations){
-		if(this.databaseUserName == null){
-	    	return this.getXmlConfigurations().getString("users.defaultUser.username");
+	public String getDatabaseUserPassword(Configurations configurations){
+		if(this.databasePassword == null){
+	    	return this.getXmlConfigurations().getString("users.defaultUser.userPassword");
 		}
 		return this.databaseUserName;
 	}
 	
-	private String getDatabaseUserPassword(Configurations configurations){
-		if(this.databasePassword == null){
-	    	return this.getXmlConfigurations().getString("users.defaultUser.userPassword");
+	//Private Methods
+	private String getDatabaseUserName(Configurations configurations){
+		if(this.databaseUserName == null){
+	    	return this.getXmlConfigurations().getString("users.defaultUser.username");
 		}
 		return this.databaseUserName;
 	}
